@@ -12,8 +12,8 @@
       --bg-card: #020617;
       --fg: #e5e7eb;
       --fg-muted: #9ca3af;
-      --accent: #f97316;
-      --accent-soft: rgba(249, 115, 22, 0.12);
+      --accent: #ff3131;
+      --accent-soft: rgba(255, 49, 49, 0.14);
       --border-subtle: rgba(148, 163, 184, 0.35);
     }
     * { box-sizing: border-box; }
@@ -34,7 +34,7 @@
       border-radius: 24px;
       border: 1px solid var(--border-subtle);
       background:
-        radial-gradient(circle at top left, rgba(249, 115, 22, 0.18), transparent 60%),
+        radial-gradient(circle at top left, rgba(255, 49, 49, 0.24), transparent 60%),
         radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.12), transparent 55%),
         linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
       box-shadow:
@@ -129,9 +129,9 @@
       white-space: nowrap;
     }
     .btn-primary {
-      background: linear-gradient(135deg, #f97316, #fb923c);
-      border-color: rgba(249, 115, 22, 0.95);
-      box-shadow: 0 14px 40px rgba(249, 115, 22, 0.45);
+      background: linear-gradient(135deg, #ff3131, #ff6666);
+      border-color: rgba(255, 49, 49, 0.95);
+      box-shadow: 0 14px 40px rgba(255, 49, 49, 0.45);
     }
     .btn-primary:hover { filter: brightness(1.05); }
     .btn-ghost {
@@ -213,7 +213,7 @@
       gap: 8px;
       flex-wrap: wrap;
     }
-    a { color: #f97316; text-decoration: none; }
+    a { color: #ff3131; text-decoration: none; }
     a:hover { text-decoration: underline; }
   </style>
 </head>
@@ -227,6 +227,11 @@
     </header>
     <section class="content">
       <div>
+        <img
+          src="https://raw.githubusercontent.com/Jah-yee/OpentheClaw/main/logo.svg"
+          alt="OpentheClaw logo"
+          style="height: 52px; margin-bottom: 10px; display: block;"
+        />
         <div class="badge-row">
           <span class="badge-dot"></span>
           <span>Configure once · then just double‑click</span>
