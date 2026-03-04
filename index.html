@@ -87,7 +87,7 @@
     .hero-subtitle {
       font-size: 13px;
       color: var(--fg-muted);
-      margin-bottom: 18px;
+      margin-bottom: 22px;
     }
     .badge-row {
       display: inline-flex;
@@ -235,7 +235,7 @@
       background: rgba(15, 23, 42, 0.96);
       font-size: 12px;
       color: var(--fg-muted);
-      min-height: 110px; /* 加大高度，让底部更接近右侧 panel */
+      min-height: 110px; /* 初始高度，后续用 JS 精准对齐右侧 panel */
       display: none;
     }
     .os-details.visible {
@@ -294,7 +294,7 @@
         </div>
         <h1 class="hero-title">OpentheClaw<span>.</span> One‑click SSH tunnel + Web login.</h1>
         <p class="hero-subtitle">
-          Your app's Web UI only listens on the server (for example <code>http://127.0.0.1:18789/</code>).
+          Your app's Web UI only listens on the server (for example <code>http://127.0.0.1:18789/</code>).<br>
           You SSH in anyway—so why type the same commands every day? Configure it once in a browser and
           launch tunnel + browser with a single double‑click.
         </p>
@@ -324,7 +324,7 @@
             <li>Switch tabs after connecting—browser opens for you.</li>
           </ul>
         </div>
-        <div class="panel" style="margin-top: 10px;">
+        <div class="panel panel-how" style="margin-top: 10px;">
           <div class="panel-title">How it works</div>
           <ul>
             <li><strong>Configure once in a local web page.</strong><br>Tell it how you SSH and which Web UI URL to open.</li>
@@ -412,6 +412,35 @@
         details.classList.remove("visible");
       });
     }
+
+    function syncOsDetailsHeight() {
+      const panel = document.querySelector(".panel-how");
+      if (!panel || !details) return;
+
+      // 暂时显示 details 以便正确测量
+      const prevDisplay = details.style.display;
+      const prevVisibility = details.style.visibility;
+      if (!details.classList.contains("visible")) {
+        details.style.visibility = "hidden";
+        details.style.display = "block";
+      }
+
+      const bottomPanel = panel.offsetTop + panel.offsetHeight;
+      const topDetails = details.offsetTop;
+      const target = bottomPanel - topDetails;
+      if (target > 0) {
+        details.style.minHeight = target + "px";
+      }
+
+      // 还原显示状态
+      if (!details.classList.contains("visible")) {
+        details.style.display = prevDisplay || "none";
+        details.style.visibility = prevVisibility || "";
+      }
+    }
+
+    syncOsDetailsHeight();
+    window.addEventListener("resize", syncOsDetailsHeight);
   })();
 </script>
 
