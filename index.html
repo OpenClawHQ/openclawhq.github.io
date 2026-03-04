@@ -74,15 +74,24 @@
       .shell { padding: 20px 16px 18px; border-radius: 20px; }
       .content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     }
+    .wordmark {
+      display: inline-block;
+      font-family: "CMU Serif", "Times New Roman", serif;
+      font-size: 26px;
+      letter-spacing: 0.06em;
+      text-transform: none;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      text-decoration: none;
+      padding-bottom: 4px;
+      margin-bottom: 14px;
+    }
     .hero-title {
       font-size: clamp(1.9rem, 2.8vw + 1.1rem, 2.4rem);
       line-height: 1.2;
       font-weight: 700;
       letter-spacing: -0.03em;
-      margin: 2px 0 10px;
-    }
-    .hero-title span {
-      color: var(--accent);
+      margin: 4px 0 10px;
     }
     .hero-subtitle {
       font-size: 13px;
@@ -228,11 +237,7 @@
     </header>
     <section class="content">
       <div>
-        <img
-          src="https://raw.githubusercontent.com/Jah-yee/OpentheClaw/main/logo.svg"
-          alt="OpentheClaw logo"
-          style="height: 60px; margin-bottom: 14px; display: block;"
-        />
+        <div class="wordmark">OpentheClaw</div>
         <div class="badge-row">
           <span class="badge-dot"></span>
           <span>Configure once · then just double‑click</span>
