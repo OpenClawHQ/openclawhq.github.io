@@ -29,3 +29,14 @@
    之后若改版，在本地改完 index.html 再 push 即可；当前这一步只做「本地对齐远程 UI + 保留 PAGES_CHECK + 忽略 dist」。
 
 如你同意，我可以按上述 3 步在仓库里直接改好并写好提交信息，你只需 `git push`。
+
+---
+
+## 保持云上与本地一致
+
+当前本地已与远端对齐（同一提交）。之后若在别处改过远端，在本机执行即可与云端一致：
+
+```bash
+cd openclawHQ.github.io
+git fetch origin && git reset --hard origin/main
+```
