@@ -1,6 +1,8 @@
 import { defineConfig } from 'astro/config';
 
 export default defineConfig({
-  site: 'https://openclawHQ.github.io',
+  site: 'https://openclawhq.github.io',
+  base: '/hq/',
   output: 'static',
+  outDir: 'hq',
 });
