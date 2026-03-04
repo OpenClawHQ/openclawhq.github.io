@@ -26,12 +26,12 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #111827 0, #020617 42%, #000 100%);
       color: var(--fg);
-      padding: 40px 18px 46px;
+      padding: 48px 24px 56px;
     }
     .shell {
       width: 100%;
-      max-width: 980px;
-      border-radius: 26px;
+      max-width: 1200px;
+      border-radius: 28px;
       border: 1px solid var(--border-subtle);
       background:
         radial-gradient(circle at top left, rgba(249, 115, 22, 0.18), transparent 60%),
@@ -40,19 +40,19 @@
       box-shadow:
         0 46px 130px rgba(15, 23, 42, 0.9),
         0 0 0 1px rgba(15, 23, 42, 0.85);
-      padding: 28px 26px 22px;
+      padding: 36px 38px 30px;
     }
     .shell-header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin-bottom: 22px;
-      font-size: 12px;
+      gap: 10px;
+      margin-bottom: 26px;
+      font-size: 13px;
       color: var(--fg-muted);
     }
     .dot {
-      width: 8px;
-      height: 8px;
+      width: 10px;
+      height: 10px;
       border-radius: 999px;
       background: #f97373;
     }
@@ -67,7 +67,7 @@
     .content {
       display: grid;
       grid-template-columns: minmax(0, 1.45fr) minmax(0, 1.2fr);
-      gap: 32px;
+      gap: 42px;
       align-items: start;
     }
     @media (max-width: 720px) {
@@ -75,30 +75,34 @@
       .content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     }
     .hero-title {
-      font-size: clamp(1.9rem, 2.8vw + 1.1rem, 2.4rem);
+      font-size: clamp(2.2rem, 3.2vw + 1.3rem, 3rem);
       line-height: 1.2;
       font-weight: 700;
       letter-spacing: -0.03em;
-      margin: 2px 0 10px;
+      margin: 2px 0 14px;
     }
     .hero-title span {
       color: var(--accent);
     }
     .hero-subtitle {
-      font-size: 13px;
+      font-size: 17px;
+      line-height: 1.55;
       color: var(--fg-muted);
-      margin-bottom: 22px;
+      margin-bottom: 26px;
+    }
+    .hero-subtitle code {
+      font-size: 0.95em;
     }
     .badge-row {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border-radius: 999px;
       background: rgba(15, 23, 42, 0.9);
       border: 1px solid rgba(148, 163, 184, 0.65);
-      font-size: 11px;
-      margin-bottom: 10px;
+      font-size: 13px;
+      margin-bottom: 12px;
     }
     .badge-dot {
       width: 6px;
@@ -110,14 +114,14 @@
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-      margin-bottom: 6px;
+      gap: 12px;
+      margin-top: 20px;
+      margin-bottom: 8px;
     }
     .btn {
       border-radius: 999px;
-      padding: 7px 16px;
-      font-size: 13px;
+      padding: 10px 20px;
+      font-size: 15px;
       font-weight: 500;
       border: 1px solid transparent;
       cursor: pointer;
@@ -147,14 +151,14 @@
     .pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.7);
-      padding: 3px 8px;
-      font-size: 11px;
+      padding: 5px 10px;
+      font-size: 13px;
       color: var(--fg-muted);
       background: rgba(15, 23, 42, 0.85);
-      margin-top: 6px;
+      margin-top: 8px;
     }
     .pill-code {
       position: relative;
@@ -190,11 +194,11 @@
       border-radius: 18px;
       border: 1px solid rgba(148, 163, 184, 0.45);
       background: rgba(15, 23, 42, 0.9);
-      padding: 14px 14px 12px;
-      font-size: 12px;
+      padding: 18px 18px 14px;
+      font-size: 14px;
     }
     .panel-title {
-      font-size: 11px;
+      font-size: 12px;
       text-transform: uppercase;
       letter-spacing: 0.12em;
       color: var(--fg-muted);
@@ -214,15 +218,15 @@
       margin-top: 12px;
     }
     .column {
-      flex: 1 1 120px;
+      flex: 1 1 140px;
       border-radius: 12px;
       border: 1px dashed rgba(148, 163, 184, 0.6);
-      padding: 8px 8px;
-      font-size: 11px;
+      padding: 10px 10px;
+      font-size: 13px;
       color: var(--fg-muted);
     }
     .column-title {
-      font-size: 11px;
+      font-size: 12px;
       font-weight: 600;
       margin-bottom: 3px;
       color: var(--fg);
@@ -266,8 +270,8 @@
       overflow-x: auto;
     }
     .footer {
-      margin-top: 18px;
-      font-size: 12px;
+      margin-top: 22px;
+      font-size: 13px;
       color: var(--fg-muted);
       display: flex;
       justify-content: space-between;
