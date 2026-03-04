@@ -228,14 +228,14 @@
       color: var(--fg);
     }
     .os-details {
-      margin-top: 8px;
-      padding: 8px 10px 7px;
-      border-radius: 12px;
+      margin-top: 10px;
+      padding: 12px 14px 10px;
+      border-radius: 14px;
       border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.9);
-      font-size: 11px;
+      background: rgba(15, 23, 42, 0.96);
+      font-size: 12px;
       color: var(--fg-muted);
-      min-height: 40px;
+      min-height: 82px;
       display: none;
     }
     .os-details.visible {
@@ -243,6 +243,24 @@
     }
     .os-details strong {
       color: var(--fg);
+    }
+    .os-details code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      color: var(--fg);
+      background: rgba(15, 23, 42, 0.9);
+      padding: 1px 5px;
+      border-radius: 6px;
+    }
+    .os-details pre {
+      margin: 6px 0 0;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(30, 64, 175, 0.7);
+      font-size: 11px;
+      color: var(--fg);
+      overflow-x: auto;
     }
     .footer {
       margin-top: 18px;
@@ -353,9 +371,24 @@
     if (!pills.length || !details) return;
 
     const templates = {
-      mac: "<strong>macOS</strong> · Open Finder, then double‑click <code>mac/Click-default-OpenClaw.command</code>. It starts the SSH tunnel and opens your configured Web UI.",
-      linux: "<strong>Linux</strong> · Run <code>linux/OpenClaw-linux.sh</code> in a terminal, or double‑click it in your file manager and choose “Run”. Your browser opens the Web UI when the tunnel is ready.",
-      windows: "<strong>Windows</strong> · In Explorer, double‑click <code>windows/OpenClaw-windows.bat</code>. Use the same shortcut every day for the same remote Web UI."
+      mac: [
+        "<strong>macOS</strong> · For people who live in Finder and Safari/Chrome.",
+        "Open Finder, then double‑click <code>mac/Click-default-OpenClaw.command</code>. It starts the SSH tunnel and opens your configured Web UI in your default browser.",
+        "You can also run it from Terminal if you prefer:",
+        "<pre><code>cd opentheclaw\nmac/Click-default-OpenClaw.command</code></pre>"
+      ].join("<br>"),
+      linux: [
+        "<strong>Linux</strong> · Works from your terminal or file manager.",
+        "In a terminal, run <code>linux/OpenClaw-linux.sh</code>, or double‑click the script in your file manager and choose “Run”. As soon as the tunnel is ready, your Web UI opens on <code>http://127.0.0.1:&lt;local_port&gt;/</code>.",
+        "Typical terminal usage:",
+        "<pre><code>cd opentheclaw\nbash linux/OpenClaw-linux.sh</code></pre>"
+      ].join("<br>"),
+      windows: [
+        "<strong>Windows</strong> · One BAT file you can put on your desktop.",
+        "In Explorer, double‑click <code>windows/OpenClaw-windows.bat</code>. It starts the SSH tunnel using Python and then launches your browser to the configured URL.",
+        "You can also pin it or call it from <code>cmd</code>:",
+        "<pre><code>cd opentheclaw\nwindows\\OpenClaw-windows.bat</code></pre>"
+      ].join("<br>")
     };
 
     function setActive(os, target) {
