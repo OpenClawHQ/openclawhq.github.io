@@ -157,22 +157,34 @@
       margin-top: 6px;
     }
     .pill-code {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      position: relative;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 11px;
       color: var(--fg);
-      background: rgba(15, 23, 42, 0.95);
+      padding: 1px 4px;
       border-radius: 999px;
-      padding: 2px 8px;
-      transition: box-shadow 0.16s ease-out, background-color 0.16s ease-out, color 0.16s ease-out, transform 0.16s ease-out;
+      background: transparent;
+      cursor: pointer;
+      transition: color 0.16s ease-out, text-shadow 0.16s ease-out;
     }
-    .pill-code:hover {
-      background: var(--accent-soft);
-      color: var(--fg);
-      box-shadow: 0 0 12px rgba(249, 115, 22, 0.85);
-      transform: translateY(-0.5px);
+    .pill-code::after {
+      content: "";
+      position: absolute;
+      inset: -4px -8px;
+      border-radius: inherit;
+      background: radial-gradient(circle, var(--accent-soft) 0, transparent 70%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease-out;
+    }
+    .pill-code:hover,
+    .pill-code.os-active {
+      color: var(--accent);
+      text-shadow: 0 0 8px rgba(249, 115, 22, 0.9);
+    }
+    .pill-code:hover::after,
+    .pill-code.os-active::after {
+      opacity: 1;
     }
     .panel {
       border-radius: 18px;
@@ -213,6 +225,23 @@
       font-size: 11px;
       font-weight: 600;
       margin-bottom: 3px;
+      color: var(--fg);
+    }
+    .os-details {
+      margin-top: 8px;
+      padding: 8px 10px 7px;
+      border-radius: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      font-size: 11px;
+      color: var(--fg-muted);
+      min-height: 40px;
+      display: none;
+    }
+    .os-details.visible {
+      display: block;
+    }
+    .os-details strong {
       color: var(--fg);
     }
     .footer {
@@ -256,12 +285,13 @@
             <span>Read full README</span>
           </a>
         </div>
-        <div class="pill">
+        <div class="pill" id="os-pill">
           <span>Supported:</span>
-          <span class="pill-code">macOS</span>
-          <span class="pill-code">Linux</span>
-          <span class="pill-code">Windows</span>
+          <span class="pill-code" data-os="mac">macOS</span>
+          <span class="pill-code" data-os="linux">Linux</span>
+          <span class="pill-code" data-os="windows">Windows</span>
         </div>
+        <div class="os-details" id="os-details"></div>
       </div>
       <aside>
         <div class="panel">
@@ -316,4 +346,39 @@
   </main>
 </body>
 </html>
+<script>
+  (function () {
+    const pills = document.querySelectorAll(".pill-code");
+    const details = document.getElementById("os-details");
+    if (!pills.length || !details) return;
+
+    const templates = {
+      mac: "<strong>macOS</strong> · Open Finder, then double‑click <code>mac/Click-default-OpenClaw.command</code>. It starts the SSH tunnel and opens your configured Web UI.",
+      linux: "<strong>Linux</strong> · Run <code>linux/OpenClaw-linux.sh</code> in a terminal, or double‑click it in your file manager and choose “Run”. Your browser opens the Web UI when the tunnel is ready.",
+      windows: "<strong>Windows</strong> · In Explorer, double‑click <code>windows/OpenClaw-windows.bat</code>. Use the same shortcut every day for the same remote Web UI."
+    };
+
+    function setActive(os, target) {
+      pills.forEach(p => p.classList.remove("os-active"));
+      if (target) target.classList.add("os-active");
+      details.innerHTML = templates[os] || "";
+      details.classList.add("visible");
+    }
+
+    pills.forEach(pill => {
+      pill.addEventListener("mouseenter", () => {
+        const os = pill.getAttribute("data-os");
+        setActive(os, pill);
+      });
+    });
+
+    const pillRow = document.getElementById("os-pill");
+    if (pillRow) {
+      pillRow.addEventListener("mouseleave", () => {
+        pills.forEach(p => p.classList.remove("os-active"));
+        details.classList.remove("visible");
+      });
+    }
+  })();
+</script>
 
