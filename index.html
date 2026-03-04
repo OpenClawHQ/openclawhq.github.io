@@ -26,27 +26,27 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #111827 0, #020617 42%, #000 100%);
       color: var(--fg);
-      padding: 24px 14px 32px;
+      padding: 40px 18px 46px;
     }
     .shell {
       width: 100%;
-      max-width: 880px;
-      border-radius: 24px;
+      max-width: 980px;
+      border-radius: 26px;
       border: 1px solid var(--border-subtle);
       background:
         radial-gradient(circle at top left, rgba(255, 49, 49, 0.24), transparent 60%),
         radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.12), transparent 55%),
         linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(2, 6, 23, 0.98));
       box-shadow:
-        0 40px 120px rgba(15, 23, 42, 0.85),
-        0 0 0 1px rgba(15, 23, 42, 0.8);
-      padding: 22px 22px 18px;
+        0 46px 130px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(15, 23, 42, 0.85);
+      padding: 28px 26px 22px;
     }
     .shell-header {
       display: flex;
       align-items: center;
       gap: 8px;
-      margin-bottom: 18px;
+      margin-bottom: 22px;
       font-size: 12px;
       color: var(--fg-muted);
     }
@@ -66,19 +66,20 @@
     }
     .content {
       display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr);
-      gap: 24px;
+      grid-template-columns: minmax(0, 1.45fr) minmax(0, 1.2fr);
+      gap: 32px;
+      align-items: start;
     }
     @media (max-width: 720px) {
-      .shell { padding: 18px 16px 16px; border-radius: 20px; }
-      .content { grid-template-columns: minmax(0, 1fr); }
+      .shell { padding: 20px 16px 18px; border-radius: 20px; }
+      .content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     }
     .hero-title {
-      font-size: clamp(1.7rem, 2.4vw + 1rem, 2.1rem);
+      font-size: clamp(1.9rem, 2.8vw + 1.1rem, 2.4rem);
       line-height: 1.2;
-      font-weight: 650;
+      font-weight: 700;
       letter-spacing: -0.03em;
-      margin: 0 0 8px;
+      margin: 2px 0 10px;
     }
     .hero-title span {
       color: var(--accent);
@@ -86,7 +87,7 @@
     .hero-subtitle {
       font-size: 13px;
       color: var(--fg-muted);
-      margin-bottom: 14px;
+      margin-bottom: 18px;
     }
     .badge-row {
       display: inline-flex;
@@ -167,7 +168,7 @@
       border-radius: 18px;
       border: 1px solid rgba(148, 163, 184, 0.45);
       background: rgba(15, 23, 42, 0.9);
-      padding: 12px 12px 10px;
+      padding: 14px 14px 12px;
       font-size: 12px;
     }
     .panel-title {
@@ -188,13 +189,13 @@
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
-      margin-top: 10px;
+      margin-top: 12px;
     }
     .column {
       flex: 1 1 120px;
       border-radius: 12px;
       border: 1px dashed rgba(148, 163, 184, 0.6);
-      padding: 6px 8px;
+      padding: 8px 8px;
       font-size: 11px;
       color: var(--fg-muted);
     }
@@ -205,8 +206,8 @@
       color: var(--fg);
     }
     .footer {
-      margin-top: 14px;
-      font-size: 11px;
+      margin-top: 18px;
+      font-size: 12px;
       color: var(--fg-muted);
       display: flex;
       justify-content: space-between;
@@ -230,7 +231,7 @@
         <img
           src="https://raw.githubusercontent.com/Jah-yee/OpentheClaw/main/logo.svg"
           alt="OpentheClaw logo"
-          style="height: 52px; margin-bottom: 10px; display: block;"
+          style="height: 60px; margin-bottom: 14px; display: block;"
         />
         <div class="badge-row">
           <span class="badge-dot"></span>
