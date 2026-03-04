@@ -1,0 +1,15 @@
+# OpentheClaw 站点配置
+# 用于文档与构建参考，最终域名以 Vercel 为准
+
+name: OpentheClaw
+description: One‑click SSH tunnel + Web login. Configure once, then double‑click to open your remote Web UI every day.
+
+# 正式域名（任选其一或同时使用）
+url: https://opentheclaw.vercel.app
+alternate_urls:
+  - https://openclawhq-github-io.vercel.app
+
+# 静态资源与 SEO
+base_url: https://opentheclaw.vercel.app
+sitemap: /sitemap.xml
+robots: /robots.txt

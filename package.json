@@ -1,13 +1,8 @@
 {
-  "name": "openclawHQ-site",
-  "type": "module",
+  "name": "openclawhq-site",
   "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview"
-  },
-  "dependencies": {
-    "astro": "^5.0.0"
+    "build": "echo 'Static site — no build step'"
   }
 }

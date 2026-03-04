@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OpentheClaw · One‑click SSH tunnel + Web login</title>
   <meta name="description" content="OpentheClaw turns SSH port forwarding + opening a Web UI into a one‑click experience. Configure once, then double‑click to open your remote Web UI every day.">
+  <link rel="canonical" href="https://opentheclaw.vercel.app/">
   <style>
     :root {
       color-scheme: light dark;
@@ -26,12 +27,16 @@
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
       background: radial-gradient(circle at top, #111827 0, #020617 42%, #000 100%);
       color: var(--fg);
-      padding: 48px 24px 56px;
+      padding: 40px 18px 46px;
+      overflow-x: visible;
     }
+    /* 卡片保持窄宽定死，整体用 scale 放大视图 */
     .shell {
       width: 100%;
-      max-width: 1200px;
-      border-radius: 28px;
+      max-width: 980px;
+      transform: scale(1.35);
+      transform-origin: center center;
+      border-radius: 26px;
       border: 1px solid var(--border-subtle);
       background:
         radial-gradient(circle at top left, rgba(249, 115, 22, 0.18), transparent 60%),
@@ -71,7 +76,7 @@
       align-items: start;
     }
     @media (max-width: 720px) {
-      .shell { padding: 20px 16px 18px; border-radius: 20px; }
+      .shell { padding: 20px 16px 18px; border-radius: 20px; transform: scale(1); }
       .content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     }
     .hero-title {
@@ -88,10 +93,7 @@
       font-size: 17px;
       line-height: 1.55;
       color: var(--fg-muted);
-      margin-bottom: 26px;
-    }
-    .hero-subtitle code {
-      font-size: 0.95em;
+      margin-bottom: 18px;
     }
     .badge-row {
       display: inline-flex;
@@ -114,14 +116,14 @@
     .actions {
       display: flex;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 20px;
-      margin-bottom: 8px;
+      gap: 10px;
+      margin-top: 16px;
+      margin-bottom: 12px;
     }
     .btn {
       border-radius: 999px;
-      padding: 10px 20px;
-      font-size: 15px;
+      padding: 8px 18px;
+      font-size: 13px;
       font-weight: 500;
       border: 1px solid transparent;
       cursor: pointer;
@@ -154,18 +156,18 @@
       gap: 8px;
       border-radius: 999px;
       border: 1px solid rgba(148, 163, 184, 0.7);
-      padding: 5px 10px;
-      font-size: 13px;
+      padding: 5px 12px;
+      font-size: 12px;
       color: var(--fg-muted);
       background: rgba(15, 23, 42, 0.85);
-      margin-top: 8px;
+      margin-top: 0;
     }
     .pill-code {
       position: relative;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 11px;
+      font-size: 12px;
       color: var(--fg);
-      padding: 1px 4px;
+      padding: 2px 5px;
       border-radius: 999px;
       background: transparent;
       cursor: pointer;
@@ -232,14 +234,14 @@
       color: var(--fg);
     }
     .os-details {
-      margin-top: 10px; /* 顶部保持不变 */
+      margin-top: 10px;
       padding: 12px 14px 10px;
       border-radius: 14px;
       border: 1px solid rgba(148, 163, 184, 0.6);
       background: rgba(15, 23, 42, 0.96);
       font-size: 12px;
       color: var(--fg-muted);
-      min-height: 110px; /* 初始高度，后续用 JS 精准对齐右侧 panel */
+      min-height: 82px;
       display: none;
     }
     .os-details.visible {
@@ -248,15 +250,12 @@
     .os-details strong {
       color: var(--fg);
     }
-    .os-details p {
-      margin: 0 0 6px;
-    }
     .os-details code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 11px;
       color: var(--fg);
       background: rgba(15, 23, 42, 0.9);
-      padding: 1px 5px;
+      padding: 2px 6px;
       border-radius: 6px;
     }
     .os-details pre {
@@ -269,6 +268,11 @@
       color: var(--fg);
       overflow-x: auto;
     }
+    .os-details pre code { background: none; padding: 0; border-radius: 0; }
+    /* 代码高亮：关键字 / 路径 / 命令 */
+    .os-details .sh-kwd { color: #7dd3fc; }
+    .os-details .sh-path { color: #86efac; }
+    .os-details .sh-cmd { color: var(--fg); }
     .footer {
       margin-top: 22px;
       font-size: 13px;
@@ -280,6 +284,9 @@
     }
     a { color: #f97316; text-decoration: none; }
     a:hover { text-decoration: underline; }
+    /* 禁用系统默认选中高亮，只保留自定义虚线框效果 */
+    ::selection { background: transparent; color: inherit; }
+    ::-moz-selection { background: transparent; color: inherit; }
   </style>
 </head>
 <body>
@@ -298,7 +305,7 @@
         </div>
         <h1 class="hero-title">OpentheClaw<span>.</span> One‑click SSH tunnel + Web login.</h1>
         <p class="hero-subtitle">
-          Your app's Web UI only listens on the server (for example <code>http://127.0.0.1:18789/</code>).<br>
+          Your app's Web UI only listens on the server (for example <code>http://127.0.0.1:18789/</code>).
           You SSH in anyway—so why type the same commands every day? Configure it once in a browser and
           launch tunnel + browser with a single double‑click.
         </p>
@@ -328,7 +335,7 @@
             <li>Switch tabs after connecting—browser opens for you.</li>
           </ul>
         </div>
-        <div class="panel panel-how" style="margin-top: 10px;">
+        <div class="panel" style="margin-top: 10px;">
           <div class="panel-title">How it works</div>
           <ul>
             <li><strong>Configure once in a local web page.</strong><br>Tell it how you SSH and which Web UI URL to open.</li>
@@ -369,82 +376,10 @@
       <span>Licensed under BSL 1.1 · See <a href="https://github.com/Jah-yee/OpentheClaw/blob/main/LICENSE" target="_blank" rel="noreferrer">LICENSE</a>.</span>
     </footer>
   </main>
+  <script src="js/config.js"></script>
+  <script src="js/cookie.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/selection-box.js"></script>
+  <script src="js/protection.js"></script>
 </body>
 </html>
-<script>
-  (function () {
-    const pills = document.querySelectorAll(".pill-code");
-    const details = document.getElementById("os-details");
-    if (!pills.length || !details) return;
-
-    const templates = {
-      mac: [
-        "<p><strong>macOS</strong> · Best if you launch everything from Finder.</p>",
-        "<p>Open Finder and double‑click <code>mac/Click-default-OpenClaw.command</code>. A small Python helper starts the SSH tunnel and then opens your saved Web UI URL in your default browser.</p>",
-        "<pre><code>cd opentheclaw\nmac/Click-default-OpenClaw.command</code></pre>"
-      ].join(""),
-      linux: [
-        "<p><strong>Linux</strong> · Works from your terminal or file manager.</p>",
-        "<p>From a terminal, run <code>linux/OpenClaw-linux.sh</code>, or double‑click it in your file manager and choose “Run”. When the tunnel is ready, your Web UI will be reachable on <code>http://127.0.0.1:&lt;local_port&gt;/</code>.</p>",
-        "<pre><code>cd opentheclaw\nbash linux/OpenClaw-linux.sh</code></pre>"
-      ].join(""),
-      windows: [
-        "<p><strong>Windows</strong> · One BAT you can keep on your desktop.</p>",
-        "<p>In Explorer, double‑click <code>windows/OpenClaw-windows.bat</code>. It sets up the SSH tunnel with Python and then launches your browser to the configured Web UI.</p>",
-        "<pre><code>cd opentheclaw\nwindows\\OpenClaw-windows.bat</code></pre>"
-      ].join("")
-    };
-
-    function setActive(os, target) {
-      pills.forEach(p => p.classList.remove("os-active"));
-      if (target) target.classList.add("os-active");
-      details.innerHTML = templates[os] || "";
-      details.classList.add("visible");
-    }
-
-    pills.forEach(pill => {
-      pill.addEventListener("mouseenter", () => {
-        const os = pill.getAttribute("data-os");
-        setActive(os, pill);
-      });
-    });
-
-    const pillRow = document.getElementById("os-pill");
-    if (pillRow) {
-      pillRow.addEventListener("mouseleave", () => {
-        pills.forEach(p => p.classList.remove("os-active"));
-        details.classList.remove("visible");
-      });
-    }
-
-    function syncOsDetailsHeight() {
-      const panel = document.querySelector(".panel-how");
-      if (!panel || !details) return;
-
-      // 暂时显示 details 以便正确测量
-      const prevDisplay = details.style.display;
-      const prevVisibility = details.style.visibility;
-      if (!details.classList.contains("visible")) {
-        details.style.visibility = "hidden";
-        details.style.display = "block";
-      }
-
-      const bottomPanel = panel.offsetTop + panel.offsetHeight;
-      const topDetails = details.offsetTop;
-      const target = bottomPanel - topDetails;
-      if (target > 0) {
-        details.style.minHeight = target + "px";
-      }
-
-      // 还原显示状态
-      if (!details.classList.contains("visible")) {
-        details.style.display = prevDisplay || "none";
-        details.style.visibility = prevVisibility || "";
-      }
-    }
-
-    syncOsDetailsHeight();
-    window.addEventListener("resize", syncOsDetailsHeight);
-  })();
-</script>
-

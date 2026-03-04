@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# 主站
+Sitemap: https://opentheclaw.vercel.app/sitemap.xml
+# 备用域名
+Sitemap: https://openclawhq-github-io.vercel.app/sitemap.xml
