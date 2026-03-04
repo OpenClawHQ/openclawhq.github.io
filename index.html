@@ -87,7 +87,7 @@
     .hero-subtitle {
       font-size: 13px;
       color: var(--fg-muted);
-      margin-bottom: 22px;
+      margin-bottom: 18px;
     }
     .badge-row {
       display: inline-flex;
@@ -229,13 +229,14 @@
     }
     .os-details {
       margin-top: 10px; /* 顶部保持不变 */
-      padding: 12px 14px 10px;
+      padding: 14px 16px 12px;
       border-radius: 14px;
       border: 1px solid rgba(148, 163, 184, 0.6);
       background: rgba(15, 23, 42, 0.96);
       font-size: 12px;
+      line-height: 1.55;
       color: var(--fg-muted);
-      min-height: 110px; /* 初始高度，后续用 JS 精准对齐右侧 panel */
+      min-height: 140px; /* 固定高度，用来和右侧 How it works 底部对齐 */
       display: none;
     }
     .os-details.visible {
@@ -244,8 +245,14 @@
     .os-details strong {
       color: var(--fg);
     }
-    .os-details p {
+    .os-details-title {
+      font-size: 12px;
+      font-weight: 600;
       margin: 0 0 6px;
+      color: var(--fg);
+    }
+    .os-details-body {
+      margin: 0 0 8px;
     }
     .os-details code {
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -294,7 +301,7 @@
         </div>
         <h1 class="hero-title">OpentheClaw<span>.</span> One‑click SSH tunnel + Web login.</h1>
         <p class="hero-subtitle">
-          Your app's Web UI only listens on the server (for example <code>http://127.0.0.1:18789/</code>).<br>
+          Your app's Web UI only listens on the server (for example <code>http://127.0.0.1:18789/</code>).
           You SSH in anyway—so why type the same commands every day? Configure it once in a browser and
           launch tunnel + browser with a single double‑click.
         </p>
@@ -324,7 +331,7 @@
             <li>Switch tabs after connecting—browser opens for you.</li>
           </ul>
         </div>
-        <div class="panel panel-how" style="margin-top: 10px;">
+        <div class="panel" style="margin-top: 10px;">
           <div class="panel-title">How it works</div>
           <ul>
             <li><strong>Configure once in a local web page.</strong><br>Tell it how you SSH and which Web UI URL to open.</li>
@@ -375,18 +382,18 @@
 
     const templates = {
       mac: [
-        "<p><strong>macOS</strong> · Best if you launch everything from Finder.</p>",
-        "<p>Open Finder and double‑click <code>mac/Click-default-OpenClaw.command</code>. A small Python helper starts the SSH tunnel and then opens your saved Web UI URL in your default browser.</p>",
+        "<div class=\\"os-details-title\\">macOS · Double‑click from Finder</div>",
+        "<p class=\\"os-details-body\\">Open Finder and double‑click <code>mac/Click-default-OpenClaw.command</code>. A small Python helper starts the SSH tunnel and then opens your saved Web UI URL in your default browser.</p>",
         "<pre><code>cd opentheclaw\nmac/Click-default-OpenClaw.command</code></pre>"
       ].join(""),
       linux: [
-        "<p><strong>Linux</strong> · Works from your terminal or file manager.</p>",
-        "<p>From a terminal, run <code>linux/OpenClaw-linux.sh</code>, or double‑click it in your file manager and choose “Run”. When the tunnel is ready, your Web UI will be reachable on <code>http://127.0.0.1:&lt;local_port&gt;/</code>.</p>",
+        "<div class=\\"os-details-title\\">Linux · Terminal or file manager</div>",
+        "<p class=\\"os-details-body\\">From a terminal, run <code>linux/OpenClaw-linux.sh</code>, or double‑click it in your file manager and choose “Run”. When the tunnel is ready, your Web UI will be reachable on <code>http://127.0.0.1:&lt;local_port&gt;/</code>.</p>",
         "<pre><code>cd opentheclaw\nbash linux/OpenClaw-linux.sh</code></pre>"
       ].join(""),
       windows: [
-        "<p><strong>Windows</strong> · One BAT you can keep on your desktop.</p>",
-        "<p>In Explorer, double‑click <code>windows/OpenClaw-windows.bat</code>. It sets up the SSH tunnel with Python and then launches your browser to the configured Web UI.</p>",
+        "<div class=\\"os-details-title\\">Windows · One BAT on your desktop</div>",
+        "<p class=\\"os-details-body\\">In Explorer, double‑click <code>windows/OpenClaw-windows.bat</code>. It sets up the SSH tunnel with Python and then launches your browser to the configured Web UI.</p>",
         "<pre><code>cd opentheclaw\nwindows\\OpenClaw-windows.bat</code></pre>"
       ].join("")
     };
@@ -412,35 +419,6 @@
         details.classList.remove("visible");
       });
     }
-
-    function syncOsDetailsHeight() {
-      const panel = document.querySelector(".panel-how");
-      if (!panel || !details) return;
-
-      // 暂时显示 details 以便正确测量
-      const prevDisplay = details.style.display;
-      const prevVisibility = details.style.visibility;
-      if (!details.classList.contains("visible")) {
-        details.style.visibility = "hidden";
-        details.style.display = "block";
-      }
-
-      const bottomPanel = panel.offsetTop + panel.offsetHeight;
-      const topDetails = details.offsetTop;
-      const target = bottomPanel - topDetails;
-      if (target > 0) {
-        details.style.minHeight = target + "px";
-      }
-
-      // 还原显示状态
-      if (!details.classList.contains("visible")) {
-        details.style.display = prevDisplay || "none";
-        details.style.visibility = prevVisibility || "";
-      }
-    }
-
-    syncOsDetailsHeight();
-    window.addEventListener("resize", syncOsDetailsHeight);
   })();
 </script>
 
