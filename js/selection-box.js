@@ -1,6 +1,6 @@
 /**
- * 选中样式：无填充 + #eae6e1 虚线框，虚线顺时针流动
- * 逐行合并 + 顺时针轮廓，支持矩形、L 形、六边形等
+ * Selection style: no fill, #eae6e1 dashed border with clockwise dash animation.
+ * Row-merge + clockwise outline; supports rect, L-shape, hexagon, etc.
  */
 (function () {
   'use strict';
@@ -128,7 +128,7 @@
     }
     if (final.length < 3) final = clean;
 
-    /* 只生成直角路径：顶点用直线连接，不用圆角 */
+    /* Right-angle path only: vertices connected by lines, no rounding */
     var d = [];
     for (var i = 0; i < final.length; i++) {
       var x = (final[i][0] - offX).toFixed(1);

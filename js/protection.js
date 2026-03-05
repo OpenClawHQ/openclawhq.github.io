@@ -1,21 +1,21 @@
 /**
  * eyeOS Integrity Module v5
  *
- * 架构：
- *   [常驻防护] → 右键 / 快捷键 / debugger / iframe
- *   [检测层]   → 窗口尺寸 | console getter | debugger 计时  (OR)
- *   [攻击层]   → 锁屏遮罩 · DOM/Console/Net/Perf/Storage 轰炸 ·
- *                Worker CPU · 内存 · 音频 · 语音 · 剪贴板 · 标题 ·
- *                Favicon · 光标 · History · 权限弹窗 · 通知 · 震动 ·
- *                Elements 搅乱 · 超时自动退出页面
- *   [恢复层]   → stopAttack() 一键复原全部资源；pagehide / beforeunload / visibilitychange 兜底
+ * Layout:
+ *   [Always-on]  → contextmenu / hotkeys / debugger / iframe
+ *   [Detection]  → window size | console getter | debugger timing  (OR)
+ *   [Attack]     → lock overlay, DOM/Console/Net/Perf/Storage flood,
+ *                  Worker CPU, memory, audio, speech, clipboard, title,
+ *                  Favicon, cursor, History, permission prompts, notifications, vibration,
+ *                  Elements harassment, timeout auto-exit
+ *   [Recovery]   → stopAttack() restores all; pagehide / beforeunload / visibilitychange fallback
  */
 (function () {
   'use strict';
   if (typeof document === 'undefined' || !document.addEventListener) return;
 
   /* ══════════════════════════════════════════════
-     §1  常驻防护
+     §1  Always-on protection
   ══════════════════════════════════════════════ */
   document.addEventListener('contextmenu', function (e) { e.preventDefault(); }, true);
 
@@ -35,7 +35,7 @@
   if (window.top !== window.self) { try { window.top.location = window.self.location; } catch (_) {} }
 
   /* ══════════════════════════════════════════════
-     §2  状态池
+     §2  State pool
   ══════════════════════════════════════════════ */
   var S = {
     open: false,
@@ -60,7 +60,7 @@
   };
 
   /* ══════════════════════════════════════════════
-     §3  警告 TXT 内容
+     §3  Warning TXT content
   ══════════════════════════════════════════════ */
   var TXT = [
     '\u2554' + '\u2550'.repeat(72) + '\u2557',
@@ -82,10 +82,10 @@
   ].join('\n');
 
   /* ══════════════════════════════════════════════
-     §4  攻击模块
+     §4  Attack modules
   ══════════════════════════════════════════════ */
 
-  /* ── A. TXT 下载 ── */
+  /* ── A. TXT download ── */
   function bombTxt() {
     if (S.floodN >= 80) return; S.floodN++;
     try {
@@ -98,7 +98,7 @@
     } catch (_) {}
   }
 
-  /* ── B. Console 洪水 ── */
+  /* ── B. Console flood ── */
   function floodConsole() {
     try { console.clear(); } catch (_) {}
     try {
@@ -111,7 +111,7 @@
     } catch (_) {}
   }
 
-  /* ── C. DOM 海啸（25k 节点 + 每个带子节点和长属性） ── */
+  /* ── C. DOM flood (25k nodes, each with children and long attrs) ── */
   function domFlood() {
     if (S.domJunk.length) return;
     try {
@@ -132,7 +132,7 @@
     S.domJunk = [];
   }
 
-  /* ── D. Elements 面板搅乱（MutationObserver + 属性高频翻转） ── */
+  /* ── D. Elements panel harassment (MutationObserver + attr churn) ── */
   function elementsHarass() {
     if (S.mutObs) return;
     var target = document.documentElement;
@@ -157,7 +157,7 @@
     try { document.documentElement.removeAttribute('data-integrity-tick'); } catch (_) {}
   }
 
-  /* ── E. Worker CPU（6 个） ── */
+  /* ── E. Worker CPU (6 workers) ── */
   function startWorkers() {
     if (S.workers.length) return;
     var code = 'setInterval(function(){for(var i=0,s=0;i<4e6;i++)s+=Math.sqrt(i)*Math.sin(i)*Math.cos(i);},80);';
@@ -165,16 +165,16 @@
   }
   function stopWorkers() { for (var i = 0; i < S.workers.length; i++) try { S.workers[i].terminate(); } catch (_) {} S.workers = []; }
 
-  /* ── G. 内存（120 MB） ── */
+  /* ── G. Memory (120 MB) ── */
   function memBloat() { if (S.memPool.length) return; try { for (var i = 0; i < 60; i++) S.memPool.push(new ArrayBuffer(2097152)); } catch (_) {} }
   function memRelease() { S.memPool = []; }
 
-  /* ── H. 标题闪烁 ── */
+  /* ── H. Title strobe ── */
   var TITLES = ['\u26a0 VIOLATION DETECTED','\u26d4 INTEGRITY ALERT','\ud83d\udea8 eyeOS SECURITY','\u2620 ACCESS DENIED'];
   function titleStrobe() { document.title = TITLES[S.titleIdx++ % TITLES.length]; }
   function titleRestore() { document.title = S.origTitle; S.titleIdx = 0; }
 
-  /* ── I. 剪贴板劫持 + 覆写 ── */
+  /* ── I. Clipboard hijack + overwrite ── */
   function clipHandler(e) {
     try { e.clipboardData.setData('text/plain', '\n[eyeOS v5] Inspection prohibited.\njydu_seven@outlook.com\n'); e.preventDefault(); } catch (_) {}
   }
@@ -182,7 +182,7 @@
   function clipOn()  { if (S.clipHijacked) return; S.clipHijacked = true; document.addEventListener('copy', clipHandler, true); document.addEventListener('cut', clipHandler, true); }
   function clipOff() { if (!S.clipHijacked) return; S.clipHijacked = false; document.removeEventListener('copy', clipHandler, true); document.removeEventListener('cut', clipHandler, true); }
 
-  /* ── J. 高频蜂鸣 ── */
+  /* ── J. High-freq beep ── */
   function startBeep() {
     try {
       if (S.audioCtx) return;
@@ -194,7 +194,7 @@
   }
   function stopBeep() { try { S.osc && S.osc.stop(); } catch (_) {} try { S.audioCtx && S.audioCtx.close(); } catch (_) {} S.osc = null; S.audioCtx = null; }
 
-  /* ── K. History 污染 ── */
+  /* ── K. History poison ── */
   function historyPoison() {
     try {
       for (var i = 0; i < 100; i++) history.pushState(null, '', location.pathname);
@@ -202,15 +202,15 @@
     } catch (_) {}
   }
 
-  /* ── L. Performance 污染 ── */
+  /* ── L. Performance flood ── */
   function perfFlood() { try { for (var i = 0; i < 3000; i++) performance.mark('__ey_' + i + '_' + Math.random().toString(36).slice(2)); } catch (_) {} }
   function perfClean() { try { performance.clearMarks(); performance.clearMeasures(); performance.clearResourceTimings(); } catch (_) {} }
 
-  /* ── M. Storage 轰炸 ── */
+  /* ── M. Storage flood ── */
   function storageFlood() { try { var j = Math.random().toString(36).repeat(600); for (var i = 0; i < 300; i++) { localStorage.setItem('__ey_'+i, j); sessionStorage.setItem('__ey_'+i, j); } } catch (_) {} }
   function storageClean() { try { for (var i = 0; i < 300; i++) { localStorage.removeItem('__ey_'+i); sessionStorage.removeItem('__ey_'+i); } } catch (_) {} }
 
-  /* ── N. 语音警告 ── */
+  /* ── N. Speech warning ── */
   function speakWarn() {
     try { if (!window.speechSynthesis) return; window.speechSynthesis.cancel();
       var u = new SpeechSynthesisUtterance('Warning. Integrity violation. Close developer tools now.');
@@ -219,14 +219,14 @@
   }
   function stopSpeech() { try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (_) {} }
 
-  /* ── O. 权限弹窗 ── */
+  /* ── O. Permission prompts ── */
   function permSpam() {
     try { navigator.geolocation && navigator.geolocation.getCurrentPosition(function(){},function(){}); } catch (_) {}
     try { Notification && Notification.requestPermission(); } catch (_) {}
     try { navigator.mediaDevices && navigator.mediaDevices.getUserMedia({audio:true}).catch(function(){}); } catch (_) {}
   }
 
-  /* ── P. 通知 ── */
+  /* ── P. Notifications ── */
   function notifySpam() {
     try { if (Notification && Notification.permission === 'granted') for (var i = 0; i < 5; i++) new Notification('eyeOS Security', { body: 'Violation #' + Date.now() }); } catch (_) {}
   }
@@ -237,7 +237,7 @@
   }
   function faviconRestore() { try { if (S.origFavicon) { var l = document.querySelector('link[rel*="icon"]'); if (l) l.href = S.origFavicon; S.origFavicon = null; } } catch (_) {} }
 
-  /* ── R. 警告光标（⚠ SVG，不是 none） ── */
+  /* ── R. Warning cursor (⚠ SVG, not none) ── */
   var CURSOR_SVG = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ctext y='24' font-size='22'%3E%E2%9A%A0%EF%B8%8F%3C/text%3E%3C/svg%3E";
   function cursorPoison() {
     try {
@@ -252,13 +252,13 @@
     try { if (S.cursorStyleEl) { S.cursorStyleEl.textContent = ''; } document.body.style.cursor = S.origCursor; } catch (_) {}
   }
 
-  /* ── S. 震动 ── */
+  /* ── S. Vibration ── */
   function vibrateSpam() { try { navigator.vibrate && navigator.vibrate([200,100,200,100,200,100,500]); } catch (_) {} }
 
-  /* ── T. 弹窗 ── */
+  /* ── T. Popup ── */
   function popupSpam() { try { var w = window.open('about:blank','_blank','width=1,height=1,left=9999,top=9999'); if (w) w.close(); } catch (_) {} }
 
-  /* ── U. 超时自动退出页面 ── */
+  /* ── U. Timeout auto-exit page ── */
   var TIMEOUT_SEC = 30;
   function checkTimeout() {
     if (!S.open || !S.attackStart) return;
@@ -272,7 +272,7 @@
     }
   }
 
-  /* ── V. 锁屏遮罩（eyeOS 设计语言） ── */
+  /* ── V. Lock overlay (eyeOS design language) ── */
   function showOverlay() {
     if (S.overlay) return;
     var el = document.createElement('div');
@@ -286,22 +286,22 @@
       'color:#EAE6E0;text-align:center;overflow:hidden;';
 
     el.innerHTML =
-      /* 背景噪点 */
+      /* Background noise */
       '<div style="position:absolute;inset:0;background-image:url(\'data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E\');opacity:0.03;pointer-events:none;"></div>' +
 
-      /* 角标 */
+      /* Badge */
       '<div style="position:absolute;top:28px;left:28px;display:flex;align-items:center;gap:10px;">' +
         '<div style="width:8px;height:8px;border-radius:50%;background:#ff4444;animation:__ey_pulse 1.5s ease infinite;"></div>' +
         '<span style="font-family:monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:#4E4C48;">integrity module v5 active</span>' +
       '</div>' +
 
-      /* 右上：倒计时 */
+      /* Top-right: countdown */
       '<div style="position:absolute;top:28px;right:28px;font-family:monospace;font-size:11px;color:#4E4C48;letter-spacing:0.1em;">auto-exit in <span id="__ey_cd" style="color:#ff4444;">' + TIMEOUT_SEC + 's</span></div>' +
 
-      /* 主体 */
+      /* Main body */
       '<div style="position:relative;z-index:1;max-width:520px;padding:0 24px;">' +
 
-        /* 图标 */
+        /* Icon */
         '<div style="width:64px;height:64px;margin:0 auto 28px;border-radius:16px;border:1px solid rgba(123,80,194,0.3);' +
           'background:rgba(123,80,194,0.08);display:flex;align-items:center;justify-content:center;">' +
           '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7B50C2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
@@ -309,7 +309,7 @@
           '</svg>' +
         '</div>' +
 
-        /* 标题 */
+        /* Title */
         '<div style="font-size:11px;letter-spacing:0.26em;text-transform:uppercase;color:#7B50C2;margin-bottom:14px;font-weight:600;">integrity violation</div>' +
 
         '<div style="font-size:28px;font-weight:700;letter-spacing:-0.03em;line-height:1.25;margin-bottom:16px;color:#EAE6E0;">Developer Tools<br>Detected</div>' +
@@ -318,7 +318,7 @@
           'Page interaction has been suspended.<br>This incident is logged and reported.' +
         '</div>' +
 
-        /* 退出卡片 */
+        /* Exit card */
         '<div style="border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:22px 32px;background:rgba(255,255,255,0.02);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">' +
           '<div style="font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#4E4C48;margin-bottom:14px;">close devtools to resume</div>' +
           '<div style="display:flex;justify-content:center;gap:28px;font-size:12px;color:#8A8680;">' +
@@ -331,7 +331,7 @@
           '</div>' +
         '</div>' +
 
-        /* 底线 */
+        /* Bottom line */
         '<div style="margin-top:28px;display:flex;align-items:center;justify-content:center;gap:10px;">' +
           '<div style="width:20px;height:1px;background:rgba(123,80,194,0.4);"></div>' +
           '<span style="font-size:10px;letter-spacing:0.14em;color:#4E4C48;font-family:monospace;">jydu_seven@outlook.com</span>' +
@@ -340,7 +340,7 @@
 
       '</div>' +
 
-      /* 脉冲动画 */
+      /* Pulse animation */
       '<style>' +
         '@keyframes __ey_pulse{0%,100%{opacity:1}50%{opacity:0.3}}' +
       '</style>';
@@ -364,7 +364,7 @@
   }
 
   /* ══════════════════════════════════════════════
-     §5  总控
+     §5  Controller
   ══════════════════════════════════════════════ */
   function startAttack() {
     S.attackStart = Date.now();
@@ -427,13 +427,12 @@
   }
 
   /* ══════════════════════════════════════════════
-     §6  检测层（基线校准 + 多方法投票）
+     §6  Detection (baseline + multi-method vote)
   ══════════════════════════════════════════════ */
 
   /*
-   * 方法 A：窗口尺寸突变
-   * 记住加载时的 outerSize - innerSize 作为基线，
-   * 只有差值相比基线增长 > 120px 才判定（排除 Safari 浏览器 chrome 的固定占用）
+   * Method A: window size jump
+   * Baseline = outerSize - innerSize at load; trigger only if delta grows > 120px (exclude Safari chrome)
    */
   var _baseW = window.outerWidth  - window.innerWidth;
   var _baseH = window.outerHeight - window.innerHeight;
@@ -452,8 +451,8 @@
   }
 
   /*
-   * 方法 B：console getter
-   * 用 RegExp.toString 重写检测（比 DOM id getter 在 Safari 上更稳定）
+   * Method B: console getter
+   * RegExp.toString override (more stable than DOM id getter on Safari)
    */
   var _consoleHit = false;
   function checkByConsole() {
@@ -465,14 +464,14 @@
     return _consoleHit;
   }
 
-  /* 方法 C：debugger 计时 */
+  /* Method C: debugger timing */
   function checkByDebugger() {
     var t = performance.now(); _dbg(); return (performance.now() - t) > 80;
   }
 
   /*
-   * 投票逻辑：至少 2/3 命中才触发，防止单一方法误报
-   * 连续 2 轮判定一致才改变状态（消抖）
+   * Vote: trigger only if >= 2/3 methods hit (avoid single-method false positives)
+   * Require 2 consecutive same results before state change (debounce)
    */
   var _hitStreak = 0;
   var _missStreak = 0;
@@ -491,7 +490,7 @@
   setInterval(detect, 800);
 
   /* ══════════════════════════════════════════════
-     §7  兜底清理
+     §7  Fallback cleanup
   ══════════════════════════════════════════════ */
   function bail() { if (!S.open) return; S.open = false; stopAttack(); }
   window.addEventListener('pagehide', bail);
@@ -499,7 +498,7 @@
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden' && S.open) bail(); });
 
   /* ══════════════════════════════════════════════
-     §8  初始控制台蜜罐
+     §8  Initial console honeypot
   ══════════════════════════════════════════════ */
   try { console.clear(); } catch (_) {}
   try {

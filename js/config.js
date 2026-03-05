@@ -1,6 +1,6 @@
 /**
- * OpentheClaw 站点配置
- * 适用于 opentheclaw.vercel.app / openclawhq-github-io.vercel.app
+ * OpentheClaw site config
+ * For opentheclaw.vercel.app / openclawhq-github-io.vercel.app
  */
 (function () {
   window.SITE_CONFIG = {

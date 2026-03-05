@@ -1,7 +1,7 @@
 User-agent: *
 Allow: /
 
-# 主站
+# Primary
 Sitemap: https://opentheclaw.vercel.app/sitemap.xml
-# 备用域名
+# Alternate
 Sitemap: https://openclawhq-github-io.vercel.app/sitemap.xml

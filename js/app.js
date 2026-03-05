@@ -1,5 +1,5 @@
 /**
- * OpentheClaw 首页交互：OS 选项悬停展示说明
+ * OpentheClaw landing page: OS option hover details
  */
 (function () {
   function initOsDetails() {
