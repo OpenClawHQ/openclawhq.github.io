@@ -7,7 +7,7 @@ description: One‑click SSH tunnel + Web login. Configure once, then double‑c
 # Production domain (use one or both)
 url: https://opentheclaw.vercel.app
 alternate_urls:
-  - https://openclawhq-github-io.vercel.app
+  - https://effectorhq-github-io.vercel.app
 
 # Static assets and SEO
 base_url: https://opentheclaw.vercel.app

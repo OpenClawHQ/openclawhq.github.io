@@ -4,4 +4,4 @@ Allow: /
 # Primary
 Sitemap: https://opentheclaw.vercel.app/sitemap.xml
 # Alternate
-Sitemap: https://openclawhq-github-io.vercel.app/sitemap.xml
+Sitemap: https://effectorhq-github-io.vercel.app/sitemap.xml

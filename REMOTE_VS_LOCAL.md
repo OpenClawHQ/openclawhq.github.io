@@ -35,6 +35,6 @@ After the merge, local `index.html` still differed slightly from remote (e.g. `.
 Local is now aligned with remote (same commit). If you change the remote elsewhere, run this to match it locally:
 
 ```bash
-cd openclawHQ.github.io
+cd effectorhq.github.io
 git fetch origin && git reset --hard origin/main
 ```

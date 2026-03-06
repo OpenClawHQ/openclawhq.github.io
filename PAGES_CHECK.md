@@ -1,12 +1,12 @@
 # GitHub Pages setup checklist (org site)
 
-If **https://openclawhq.github.io** returns 404, Pages is not enabled or not published yet. Use this checklist.
+If **https://effectorhq.github.io** returns 404, Pages is not enabled or not published yet. Use this checklist.
 
 ---
 
 ## 1. Repository visibility
 
-- Open **https://github.com/OpenClawHQ/openclawhq.github.io**
+- Open **https://github.com/effectorHQ/effectorhq.github.io**
 - Go to **Settings** → scroll to **Danger Zone**
 - If the repo is **Private**, set it to **Public** (Pages on free accounts only works for public repos)
 
@@ -25,7 +25,7 @@ If **https://openclawhq.github.io** returns 404, Pages is not enabled or not pub
 
 ## 3. Wait for deployment
 
-- After saving, wait 1–3 minutes and open **https://openclawhq.github.io**
+- After saving, wait 1–3 minutes and open **https://effectorhq.github.io**
 - If it still 404s, check **Settings → Pages** for errors or wait a bit longer
 
 ---
